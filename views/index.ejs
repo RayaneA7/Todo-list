@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<%- include('./partials/head.ejs') %>
+
+
+    <body>
+        <%- include('./partials/header.ejs') %>
+
+            <%- include('./partials/nav.ejs') %>
+
+                <div class=main>
+                    <div id="Home">
+                        <h1 class="homeheading"> Home</h1>
+                        <p style="text-align: center;"> Bienvenue dans notre application </p>
+                    </div>
+                    <form id="To_do_list" action="/todos" method="POST">
+                        <h2> Create your To-Do List </h2>
+                        <label for="task"> Add a task </label>
+                        <input id="task" type="text" placeholder="write your task " name='todo'>
+                        <button type="submit">Submit</button>
+                        <% let i=0; %>
+                            <% if ( result.length> 0 ) { result.forEach(todo => { %>
+
+                                <p id='<%= i %>' <% i++; %>
+                                    ><% if (todo.finished===false) { %>
+                                        <%= todo.todo %>
+
+                                            <a class='delete' data-doc="<%= todo._id %>">X</a>
+                                            <a class='update' data-do="<%= todo._id %>">F</a></p>
+                                <% } %>
+                                    <% })}else { %>
+                                        <p> there is no tasks at all </p>
+                                        <% } %>
+                    </form>
+                    <form id="project" action="/projects" method="POST">
+                        <h2> Create your Projects </h2>
+                        <label for="task"> Add a Project </label>
+                        <input id="Project" type="text" placeholder="write your project here " name='project'>
+                        <button type="submit" value="Add">Submit</button>
+                        <label for="projectcolor"> <br> Choose a color for your project</label>
+                        <input id="projectcolor" type="color" name='color'>
+                    </form>
+                </div>
+    </body>
+    <hr>
+    <%- include('./partials/footer.ejs') %>
+        <script>
+            const trashcan = document.querySelectorAll('a.delete');
+            trashcan.forEach(trash => {
+                trash?.addEventListener('click', (e) => {
+                    console.log('yes it clicked');
+                    const endpoint = `/tasks/${trash.dataset.doc}`;
+
+                    fetch(endpoint, {
+                        method: 'DELETE'
+                    })
+                        .then((respance) => {
+                            console.log(respance);
+                            respance.json()
+                                .then((data) => {
+                                    console.log(data);
+                                    location.reload();
+                                })
+                                .catch(err => {
+                                    console.log(err)
+                                });
+                        })
+                        .catch(err => {
+                            console.log(err)
+                        })
+                })
+            });
+            const trashcanS = document.querySelectorAll('a.update');
+            trashcanS.forEach(trash => {
+                trash?.addEventListener('click', (e) => {
+                    console.log('yes it clicked');
+                    const endpoints = `/tasks/${trash.dataset.do}`;
+
+                    fetch(endpoints, {
+                        method: 'PUT'
+                    })
+                        .then((respance) => {
+                            console.log(respance);
+                            respance.json()
+                                .then((data) => {
+                                    console.log(data);
+                                    location.reload();
+                                })
+                                .catch(err => {
+                                    console.log(err)
+                                });
+                        })
+                        .catch(err => {
+                            console.log(err)
+                        })
+                })
+            });
+        </script>
