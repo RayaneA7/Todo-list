@@ -3,7 +3,8 @@ const { dir } = require('console');
 const { Router } = require('express');
 const express = require('express');
 const mongoose = require('mongoose'); 
-const Todo = require('./models/todo.js');
+const Todo = require('./models/todo.js')
+;require("dotenv");
 
 let host = 'localhost';
 let port = 3000;
@@ -13,7 +14,7 @@ let todos = { };
 const app = express();
 
 //connect  to mongoob
-const dbURI = 'mongodb+srv://Rayane:rayane1234@cluster0.ubwer.mongodb.net/studentTM?retryWrites=true&w=majority';
+const dbURI = 'process.env.MONGODURI'
 mongoose.connect(dbURI ,{useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false} )
     .then((result) => app.listen(port , () => {
         console.log('the app is listenning');
